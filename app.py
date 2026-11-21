@@ -1,6 +1,28 @@
 from flask import Flask, render_template
+from database.db import close_db, init_db, seed_db, get_db
 
 app = Flask(__name__)
+
+# Register database context teardown
+app.teardown_appcontext(close_db)
+
+
+# ------------------------------------------------------------------ #
+# CLI Commands                                                        #
+# ------------------------------------------------------------------ #
+
+@app.cli.command("init-db")
+def init_db_command():
+    """Create all database tables."""
+    init_db()
+    print("Initialized the database.")
+
+
+@app.cli.command("seed-db")
+def seed_db_command():
+    """Seed database with default categories and sample data."""
+    seed_db()
+    print("Seeded the database.")
 
 
 # ------------------------------------------------------------------ #
